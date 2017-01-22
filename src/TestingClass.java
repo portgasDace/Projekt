@@ -19,11 +19,11 @@ public class TestingClass {
 
 	public static void main(String [ ] args) throws FileNotFoundException 
 	{
-		int runsNumber= 50;
-		int offset=runsNumber/10;
-		int sCount=1000;
-		int dCount = 1000;
-		int range = 30000;
+		int runsNumber= 40;
+		int offset=runsNumber/10 + 20;
+		int sCount=100;
+		int dCount = 100;
+		int range = 300000;
 		ArrayList<Long> resultList = new ArrayList<Long>();
 		for(int k=0;k<6;k++){
 			resultList.add((long)0);
@@ -47,12 +47,16 @@ public class TestingClass {
 		System.out.println("Number of search opeartions in one experiment :"+sCount);
 		System.out.println("Number of delete opeartions in one experiment :"+dCount);
 		System.out.println("Number of experiments :"+runsNumber);
+		System.out.println("Times are given in nano seconds. ");
 		System.out.println("AVL Tree insert time: "+resultList.get(0));
 		System.out.println("Unbalanced Tree insert time: "+resultList.get(1));
 		System.out.println("AVL Tree search time: "+resultList.get(2));
 		System.out.println("Unbalanced Tree search time: "+resultList.get(3));
 		System.out.println("AVL Tree delete time: "+resultList.get(4));
 		System.out.println("Unbalanced Tree delete time: "+resultList.get(5));
+		
+		
+		
 
 	}
 
@@ -111,7 +115,7 @@ public class TestingClass {
 
 		Random randomGenerator = new Random();
 		//search
-		int sOffset = sCount/10;
+		int sOffset = sCount/10 +20 ;
 		for(i=0;i<sCount+sOffset;i++){
 			int rand = randomGenerator.nextInt(range);
 
@@ -132,7 +136,7 @@ public class TestingClass {
 
 
 		//delete
-		int dOffset = dCount / 10;
+		int dOffset = dCount / 10 + 20;
 		for(i=0;i<dCount+dOffset;i++){
 			int rand = randomGenerator.nextInt(range);
 
@@ -140,14 +144,14 @@ public class TestingClass {
 			long startTimeAVLDelete= System.nanoTime();
 			avlTree.delete(rand);
 			if(i>=dOffset){
-				AVLSearchResultTime += System.nanoTime()-startTimeAVLDelete;
+				AVLDeleteResultTime += System.nanoTime()-startTimeAVLDelete;
 			}
 
 			//unbalanced
 			long startTimeUnbDelete= System.nanoTime();
 			unbTree.delete(rand);
 			if(i>=dOffset){
-				UnbSearchResultTime+=System.nanoTime()-startTimeUnbDelete;
+				UnbDeleteResultTime+=System.nanoTime()-startTimeUnbDelete;
 			}
 		}
 
