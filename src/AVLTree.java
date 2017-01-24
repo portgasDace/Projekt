@@ -68,20 +68,22 @@ public class AVLTree {
 
 	private void delete(int value, AVLNode node){
 
-		if(node.getValue()<value){
+		if(node.getValue()>value){
 			if(node.getLeftChild()!=null){
 				delete(value, node.getLeftChild());
 			}
 			else{
 				//greska, ne postoji cvor koji se treba izbrisati;
+				return;
 			}
 		}
-		else if(node.getValue()>value){
+		else if(node.getValue()<value){
 			if(node.getRightChild()!=null){
 				delete(value, node.getRightChild());
 			}
 			else{
 				//greska, ne postoji cvor koji se treba izbrisati;
+				return;
 			}
 		}
 		else{
@@ -168,8 +170,8 @@ public class AVLTree {
 			return node;
 		}
 		else if(node.getValue()>=value){
-			if(node.getRightChild()!=null){
-				return search(value, node.getRightChild());
+			if(node.getLeftChild()!=null){
+				return search(value, node.getLeftChild());
 			}
 			else{
 				//greska, node ne postoji
@@ -177,8 +179,8 @@ public class AVLTree {
 			}
 		}
 		else{
-			if(node.getLeftChild()!=null){
-				return search(value, node.getLeftChild());
+			if(node.getRightChild()!=null){
+				return search(value, node.getRightChild());
 			}
 			else{
 				//greska, node ne postoji

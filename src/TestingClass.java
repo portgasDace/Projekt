@@ -19,16 +19,17 @@ public class TestingClass {
 
 	public static void main(String [ ] args) throws FileNotFoundException 
 	{
-		int runsNumber= 40;
-		int offset=runsNumber/10 + 20;
-		int sCount=100;
-		int dCount = 100;
-		int range = 300000;
+		int runsNumber= 100;
+		int offset=2 ;
+		int sCount=0;
+		int dCount = 0;
+		int range = 100000;
 		ArrayList<Long> resultList = new ArrayList<Long>();
 		for(int k=0;k<6;k++){
 			resultList.add((long)0);
 		}
 		for(int i =0;i<runsNumber+offset;i++){
+			
 			InputGenerator.main(null);
 			ArrayList<Long> templist = new ArrayList<>();
 			getResult(templist, sCount, dCount, range);
@@ -54,9 +55,9 @@ public class TestingClass {
 		System.out.println("Unbalanced Tree search time: "+resultList.get(3));
 		System.out.println("AVL Tree delete time: "+resultList.get(4));
 		System.out.println("Unbalanced Tree delete time: "+resultList.get(5));
-		
-		
-		
+
+
+
 
 	}
 
@@ -94,8 +95,7 @@ public class TestingClass {
 			e.printStackTrace();
 		}
 		AVLInsertResultTime+=System.nanoTime()-startTimeAVLInsert;
-
-		//unbalaced
+		   //unbalaced
 		long startTimeUnbInsert= System.nanoTime();
 		@SuppressWarnings("resource")
 		BufferedReader br2 = new BufferedReader(new FileReader("input.txt"));
@@ -113,46 +113,53 @@ public class TestingClass {
 		}
 		UnbInsertResultTime+=System.nanoTime()-startTimeUnbInsert;
 
-		Random randomGenerator = new Random();
+		//Random randomGenerator = new Random();
 		//search
-		int sOffset = sCount/10 +20 ;
-		for(i=0;i<sCount+sOffset;i++){
+		
+		for(i=0;i<sCount;i++){
+			Random randomGenerator = new Random();
 			int rand = randomGenerator.nextInt(range);
-
+			
+			
 			//avl
 			long startTimeAVLSearch= System.nanoTime();
+			
 			avlTree.search(rand);
-			if(i>=sOffset){
-				AVLSearchResultTime += System.nanoTime()-startTimeAVLSearch;
-			}
+			
+			
+			AVLSearchResultTime += System.nanoTime()-startTimeAVLSearch;
+			
+			
+
 
 			//unbalanced
 			long startTimeUnbSearch= System.nanoTime();
 			unbTree.search(rand);
-			if(i>=sOffset){
-				UnbSearchResultTime+=System.nanoTime()-startTimeUnbSearch;
-			}
+
+			UnbSearchResultTime+=System.nanoTime()-startTimeUnbSearch;
+
 		}
 
 
 		//delete
-		int dOffset = dCount / 10 + 20;
-		for(i=0;i<dCount+dOffset;i++){
+
+		for(i=0;i<dCount;i++){
+			Random randomGenerator = new Random();
 			int rand = randomGenerator.nextInt(range);
 
 			//avl
 			long startTimeAVLDelete= System.nanoTime();
 			avlTree.delete(rand);
-			if(i>=dOffset){
-				AVLDeleteResultTime += System.nanoTime()-startTimeAVLDelete;
-			}
+
+			AVLDeleteResultTime += System.nanoTime()-startTimeAVLDelete;
+
 
 			//unbalanced
 			long startTimeUnbDelete= System.nanoTime();
 			unbTree.delete(rand);
-			if(i>=dOffset){
-				UnbDeleteResultTime+=System.nanoTime()-startTimeUnbDelete;
-			}
+
+			UnbDeleteResultTime+=System.nanoTime()-startTimeUnbDelete;
+
 		}
 
 		//get arithemtic result time

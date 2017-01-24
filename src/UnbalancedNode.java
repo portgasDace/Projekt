@@ -54,7 +54,7 @@ public class UnbalancedNode {
 		if(this.getParent()==null){
 			return false;
 		}
-		if(getParent().getLeftChild().equals(this)){
+		if( getParent().getLeftChild()!=null && getParent().getLeftChild().equals(this)){
 			return true;
 		}
 		else {

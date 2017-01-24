@@ -9,7 +9,7 @@ public class InputGenerator {
 	{
 		BufferedWriter writer = null;
 		int i;
-		int n=300000;
+		int n=100000;
 		try
 		{
 			writer=new BufferedWriter( new FileWriter( "input.txt"));
