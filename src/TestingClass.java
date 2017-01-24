@@ -19,9 +19,9 @@ public class TestingClass {
 
 	public static void main(String [ ] args) throws FileNotFoundException 
 	{
-		int runsNumber= 100;
+		int runsNumber= 20;
 		int offset=2 ;
-		int sCount=0;
+		int sCount=100;
 		int dCount = 0;
 		int range = 100000;
 		ArrayList<Long> resultList = new ArrayList<Long>();

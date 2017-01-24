@@ -126,15 +126,6 @@ public class UnbalancedTree {
 			return node;
 		}
 		else if(node.getValue()>=value){
-			if(node.getRightChild()!=null){
-				return search(value, node.getRightChild());
-			}
-			else{
-				//greska, node ne postoji
-				return null;
-			}
-		}
-		else{
 			if(node.getLeftChild()!=null){
 				return search(value, node.getLeftChild());
 			}
@@ -143,6 +134,16 @@ public class UnbalancedTree {
 				return null;
 			}
 		}
+		else{
+			if(node.getRightChild()!=null){
+				return search(value, node.getRightChild());
+			}
+			else{
+				//greska, node ne postoji
+				return null;
+			}
+		}
+		
 	}
 
 	public void insert (int value){
