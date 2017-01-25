@@ -19,20 +19,19 @@ public class TestingClass {
 
 	public static void main(String [ ] args) throws FileNotFoundException 
 	{
-		int runsNumber= 20;
-		int offset=2 ;
-		int sCount=100;
-		int dCount = 0;
-		int range = 100000;
+		int runsNumber= 10;
+		int offset=1 ;
+		int range = 2000000;
+		int count=range/1000;
 		ArrayList<Long> resultList = new ArrayList<Long>();
 		for(int k=0;k<6;k++){
 			resultList.add((long)0);
 		}
 		for(int i =0;i<runsNumber+offset;i++){
-			
+			System.out.println(i);
 			InputGenerator.main(null);
 			ArrayList<Long> templist = new ArrayList<>();
-			getResult(templist, sCount, dCount, range);
+			getResult(templist, count , range);
 			if(i>=offset){
 				for(int j=0;j<6;j++){
 					resultList.set(j, resultList.get(j)+templist.get(j)); 
@@ -45,8 +44,7 @@ public class TestingClass {
 		}
 		System.out.println("Experiment stats :");
 		System.out.println("Number of tree nodes :"+range);
-		System.out.println("Number of search opeartions in one experiment :"+sCount);
-		System.out.println("Number of delete opeartions in one experiment :"+dCount);
+		System.out.println("Number of search, insert and delete opeartions in one experiment :"+count);
 		System.out.println("Number of experiments :"+runsNumber);
 		System.out.println("Times are given in nano seconds. ");
 		System.out.println("AVL Tree insert time: "+resultList.get(0));
@@ -62,7 +60,7 @@ public class TestingClass {
 	}
 
 
-	private static  void getResult (ArrayList<Long> list, int sCount, int dCount, int range) throws FileNotFoundException{
+	private static  void getResult (ArrayList<Long> list, int count,  int range) throws FileNotFoundException{
 
 
 		long AVLInsertResultTime=0;
@@ -71,15 +69,13 @@ public class TestingClass {
 		long UnbInsertResultTime=0;
 		long UnbSearchResultTime=0;
 		long UnbDeleteResultTime=0;
+		ArrayList<Integer> nodeList = new ArrayList<>();
 		int i;
 
-
-		//insert
 		AVLTree avlTree = new AVLTree();
 		UnbalancedTree unbTree = new UnbalancedTree();
 
-		//avl
-		long  startTimeAVLInsert= System.nanoTime();
+		//avl init
 		@SuppressWarnings("resource")
 		BufferedReader br = new BufferedReader(new FileReader("input.txt"));
 		try {
@@ -94,9 +90,8 @@ public class TestingClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		AVLInsertResultTime+=System.nanoTime()-startTimeAVLInsert;
-		   //unbalaced
-		long startTimeUnbInsert= System.nanoTime();
+
+		//unbalaced init
 		@SuppressWarnings("resource")
 		BufferedReader br2 = new BufferedReader(new FileReader("input.txt"));
 		try {
@@ -111,66 +106,67 @@ public class TestingClass {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		UnbInsertResultTime+=System.nanoTime()-startTimeUnbInsert;
 
-		//Random randomGenerator = new Random();
-		//search
-		
-		for(i=0;i<sCount;i++){
+		//init list of random nodes
+		for(i=0;i<count;i++){
 			Random randomGenerator = new Random();
 			int rand = randomGenerator.nextInt(range);
-			
-			
-			//avl
-			long startTimeAVLSearch= System.nanoTime();
-			
-			avlTree.search(rand);
-			
-			
-			AVLSearchResultTime += System.nanoTime()-startTimeAVLSearch;
-			
-			
-
-
-			//unbalanced
-			long startTimeUnbSearch= System.nanoTime();
-			unbTree.search(rand);
-
-			UnbSearchResultTime+=System.nanoTime()-startTimeUnbSearch;
-
+			nodeList.add(rand);
 		}
 
-
-		//delete
-
-		for(i=0;i<dCount;i++){
-			Random randomGenerator = new Random();
-			int rand = randomGenerator.nextInt(range);
-
-			//avl
-			long startTimeAVLDelete= System.nanoTime();
-			avlTree.delete(rand);
-
-			AVLDeleteResultTime += System.nanoTime()-startTimeAVLDelete;
-
-
-			//unbalanced
-			long startTimeUnbDelete= System.nanoTime();
-			unbTree.delete(rand);
-
-			UnbDeleteResultTime+=System.nanoTime()-startTimeUnbDelete;
-
+		//avl insert
+		long  startTimeAVLInsert= System.nanoTime();
+		for(i=0;i<count;i++){
+			avlTree.insert(nodeList.get(i));
 		}
+		AVLInsertResultTime+=System.nanoTime()-startTimeAVLInsert;	
+
+		//avl search
+		long  startTimeAVLSearch= System.nanoTime();
+		for(i=0;i<count;i++){
+			avlTree.search(nodeList.get(i));
+		}
+		AVLSearchResultTime+=System.nanoTime()-startTimeAVLSearch;	
+
+		//avl delete
+		long  startTimeAVLDelete= System.nanoTime();
+		for(i=0;i<count;i++){
+			avlTree.delete(nodeList.get(i));
+		}
+		AVLDeleteResultTime+=System.nanoTime()-startTimeAVLDelete;			
+
+
+		//unbalanced insert
+		long  startTimeUnbInsert= System.nanoTime();
+		for(i=0;i<count;i++){
+			unbTree.insert(nodeList.get(i));
+		}
+		UnbInsertResultTime+=System.nanoTime()-startTimeUnbInsert;	
+
+		//unbalanced search
+		long  startTimeUnbSearch= System.nanoTime();
+		for(i=0;i<count;i++){
+			unbTree.search(nodeList.get(i));
+		}
+		UnbSearchResultTime+=System.nanoTime()-startTimeUnbSearch;	
+
+		//unbalanced delete
+		long  startTimeUnbDelete= System.nanoTime();
+		for(i=0;i<count;i++){
+			unbTree.delete(nodeList.get(i));
+		}
+		UnbDeleteResultTime+=System.nanoTime()-startTimeUnbDelete;
 
 		//get arithemtic result time
-		if(sCount!=0){
-			AVLSearchResultTime = AVLSearchResultTime / sCount;
-			UnbSearchResultTime = UnbSearchResultTime / sCount;
+		if(count!=0){
+			AVLSearchResultTime = AVLSearchResultTime / count;
+			UnbSearchResultTime = UnbSearchResultTime / count;
+			AVLDeleteResultTime = AVLDeleteResultTime / count;
+			UnbDeleteResultTime = UnbDeleteResultTime / count;
+			AVLInsertResultTime = AVLInsertResultTime / count;
+			UnbInsertResultTime = UnbInsertResultTime / count;
 		}
-		if(dCount!=0){
-			AVLDeleteResultTime = AVLDeleteResultTime / dCount;
-			UnbDeleteResultTime = UnbDeleteResultTime / dCount;
-		}
+
 
 		//list init
 		list.clear();
