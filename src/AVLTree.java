@@ -68,6 +68,8 @@ public class AVLTree {
 
 	private void delete(int value, AVLNode node){
 
+		
+		
 		if(node.getValue()>value){
 			if(node.getLeftChild()!=null){
 				delete(value, node.getLeftChild());
@@ -87,8 +89,14 @@ public class AVLTree {
 			}
 		}
 		else{
+			int nodeType=0;
+			AVLNode parent=null;
 			// no children
 			if(node.getLeftChild()==null && node.getRightChild() ==null){
+				nodeType=1;
+				if(node.getParent()!=null){
+					parent=node.getParent();
+				}
 				if(node.getParent()!=null){
 					if(node.isNodeLeftChild()){
 						node.getParent().setLeftChild(null);
@@ -104,6 +112,10 @@ public class AVLTree {
 			//only left child
 			else if(node.getLeftChild()!=null && node.getRightChild() ==null){
 
+				nodeType=2;
+				if(node.getParent()!=null){
+					parent=node.getParent();
+				}
 				if(node.getParent()!=null){
 					if(node.isNodeLeftChild()){
 						node.getParent().setLeftChild(node.getLeftChild());
@@ -120,6 +132,10 @@ public class AVLTree {
 			//only right child
 			else if(node.getLeftChild()==null && node.getRightChild() !=null){
 
+				nodeType=2;
+				if(node.getParent()!=null){
+					parent=node.getParent();
+				}
 				if(node.getParent()!=null){
 					if(node.isNodeLeftChild()){
 						node.getParent().setLeftChild(node.getRightChild());
@@ -137,9 +153,11 @@ public class AVLTree {
 			else{
 				//even if node is root no need to handle differently, since only value will change!
 				AVLNode switchNode = node.getLeftChild();
+				nodeType=3;
 				while(switchNode.getRightChild()!=null){
 					switchNode=switchNode.getRightChild();
 				}
+				parent=switchNode.getParent();
 				if(switchNode.getLeftChild()!=null){
 					if(switchNode.isNodeLeftChild()){
 						switchNode.getParent().setLeftChild(switchNode.getLeftChild());
@@ -152,8 +170,12 @@ public class AVLTree {
 				node.setValue(switchNode.getValue());
 			}
 
-			//update height and rebalance
-			updateHeightAfterDoubleRotation(treeRoot);
+			//update height 
+			if(nodeType!=0){
+				updateHeightAfterInsert(parent);
+			}
+			//rotate
+			
 			rotateAfterDelete(treeRoot);
 
 		}
@@ -336,7 +358,7 @@ public class AVLTree {
 
 	private void rotateAfterDelete(AVLNode node){
 
-		AVLNode parent=null;
+		/*AVLNode parent=null;
 		int rotationType=checkAndRotate(node);
 		boolean isLeftChild = node.isNodeLeftChild();
 
@@ -363,6 +385,41 @@ public class AVLTree {
 			}
 			else{
 				updateHeightAfterDoubleRotation(treeRoot);
+			}
+		}*/
+		while(true){
+			int rotationType=0;
+			AVLNode parent=null;
+			boolean isLeftChild;
+			if(node.getParent()!=null){
+				parent = node.getParent();
+				isLeftChild=node.isNodeLeftChild();
+			}
+			rotationType=checkAndRotate(node);
+			if(rotationType==1){
+				updateHeightAfterSingleRotation(node.getParent());
+				
+			}
+			else if(rotationType==2){
+				if(node.getParent()!=null){
+					parent=node.getParent();
+					isLeftChild=node.isNodeLeftChild();
+					if(isLeftChild){
+						updateHeightAfterDoubleRotation(parent.getLeftChild());
+					}
+					else{
+						updateHeightAfterDoubleRotation(parent.getRightChild());
+					}
+				}
+				
+			}
+			else{
+				if(node.getParent()==null){
+					break;
+				}
+				else{
+					node=node.getParent();
+				}
 			}
 		}
 	}

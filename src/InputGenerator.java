@@ -9,13 +9,14 @@ public class InputGenerator {
 	{
 		BufferedWriter writer = null;
 		int i;
-		int n=2000000;
+		int n=700;
 		try
 		{
 			writer=new BufferedWriter( new FileWriter( "input.txt"));
 			Random rg = new Random();
 			for(i=0;i<n;i++){
-				writer.write( Integer.toString(rg.nextInt(n)));
+				//rg.nextInt(20*n)
+				writer.write( Integer.toString(rg.nextInt(20*n)));
 				if(i!=n-1){
 					writer.newLine();
 				}
